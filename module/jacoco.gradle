@@ -1,0 +1,72 @@
+apply plugin: "jacoco"
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+android {
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+    }
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+                jacoco.excludes = ['jdk.internal.*']
+            }
+        }
+    }
+
+    def fileFilter = [
+            '*/$ViewInjector*.*',
+            '*/$ViewBinder*.*',
+            '**/R.class',
+            '*/R$.class',
+            '**/R2.class',
+            '*/R2$.class',
+            '*/BuildConfig.',
+            '*/Manifest.*',
+            '*/*Test.*',
+            'android/*/.*',
+            '*/_ViewBinding*.*',
+            '*/_Factory.*',
+            '*/_MembersInjector.*',
+            '*/$$Parcelable*.*'
+    ]
+
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def kotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+    def kotlinSrc = "${project.projectDir}/src/main/kotlin"
+
+    task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest'], group: 'jacocoReport') {
+
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+
+        getSourceDirectories().setFrom(files([mainSrc, kotlinSrc]))
+        getClassDirectories().setFrom(files([debugTree, kotlinTree]))
+        getExecutionData().setFrom(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
+    }
+
+    task jacocoTestCoverageVerification(type: JacocoCoverageVerification, dependsOn: 'jacocoTestReport', group: 'jacocoReport') {
+
+        getSourceDirectories().setFrom(files([mainSrc, kotlinSrc]))
+        getClassDirectories().setFrom(files([debugTree, kotlinTree]))
+        getExecutionData().setFrom(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
+
+        violationRules {
+            setFailOnViolation(false)
+
+            rule {
+                limit {
+                    minimum = 0.0
+                }
+            }
+        }
+    }
+}

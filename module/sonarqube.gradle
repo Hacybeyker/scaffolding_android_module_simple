@@ -1,0 +1,48 @@
+apply plugin: "org.sonarqube"
+
+sonarqube {
+    version = "2.6.1"
+}
+
+android {
+    def fileFilter = [
+            '*/$ViewInjector*.*',
+            '*/$ViewBinder*.*',
+            '**/R.class',
+            '*/R$.class',
+            '**/R2.class',
+            '*/R2$.class',
+            '*/BuildConfig.',
+            '*/Manifest.*',
+            '*/*Test.*',
+            'android/*/.*',
+            '*/_ViewBinding*.*',
+            '*/_Factory.*',
+            '*/_MembersInjector.*',
+            '*/$$Parcelable*.*'
+    ]
+
+    sonarqube {
+        properties {
+            property("sonar.projectKey", Configuration.applicationId)
+            property("sonar.organization", "hacybeyker")
+            property("sonar.projectName", Configuration.artifactId)
+            property("sonar.projectDescription", "this is a module")
+            property("sonar.projectVersion", Configuration.version)
+            property("sonar.projectBaseDir", rootProject.rootDir.toString() + "/module")
+            property("sonar.sources", "./src/main/")
+            property("sonar.sourceEncoding", "UTF-8")
+            property("sonar.java.binaries", "target/classes, app/build/tmp/kotlin-classes")
+            property("sonar.java.source", "1.8")
+            property("sonar.c.file.suffixes", "-")
+            property("sonar.cpp.file.suffixes", "-")
+            property("sonar.objc.file.suffixes", "-")
+            property("sonar.tests", "src/test/java, src/androidTest/java")
+            property("sonar.import_unknown_files", true)
+            property("sonar.androidLint.reportPaths", "${project.buildDir}/reports/lint-results.xml")
+            property("sonar.java.coveragePlugin", "jacoco")
+            property("sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+            property("sonar.coverage.exclusions", fileFilter)
+        }
+    }
+}
