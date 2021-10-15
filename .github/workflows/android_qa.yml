@@ -1,0 +1,92 @@
+name: Android Build QA
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Run lint
+        run: ./gradlew module:lint
+
+      - name: Upload html test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: lint_report
+          path: module/build/reports/lint-results.html
+
+  unit-test:
+    name: Unit Test
+    needs: [ lint ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Run tests
+        run: ./gradlew module:test
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit_test_report
+          path: module/build/reports/tests/testDebugUnitTest/
+
+  jacoco:
+    name: Coverage Test
+    needs: [ unit-test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Run Jacoco Test Report
+        run: ./gradlew module:jacocoTestReport
+
+      - name: Upload coverage test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: jacoco_test_report
+          path: module/build/reports/jacoco/jacocoTestReport/
+
+      - name: Run Jacoco Test Coverage Verification
+        run: ./gradlew module:jacocoTestCoverageVerification
+
+  sonarqube:
+    name: Analysis Code
+    needs: [ jacoco ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: SonarCloud Scan
+        run: ./gradlew module:sonarqube -Dsonar.login=${{ secrets.SONARCLOUDTOKEN }} -Dsonar.host.url="https://sonarcloud.io/"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+##TODO agegar job para publicar artefacto en github package

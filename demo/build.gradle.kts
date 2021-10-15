@@ -10,7 +10,7 @@ android {
     buildToolsVersion = VersionApp.buildToolsVersion
 
     defaultConfig {
-        applicationId = "com.hacybeyker.module"
+        applicationId = "com.hacybeyker.module.demo"
         minSdk = VersionApp.minSdkVersion
         targetSdk = VersionApp.targetSdkVersion
         versionCode = 1
