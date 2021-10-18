@@ -3,7 +3,7 @@ name: Android Build QA
 on:
   push:
     branches:
-      - '*'
+      #- '*'
 
 jobs:
   lint:
@@ -15,6 +15,12 @@ jobs:
 
       - name: Make Gradle executable
         run: chmod +x ./gradlew
+
+      - name: Submodule Init
+        run: git submodule init
+
+      - name: Submodule Update
+        run: git submodule update
 
       - name: Run lint
         run: ./gradlew module:lint
@@ -32,6 +38,12 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+
+      - name: Submodule Init
+        run: git submodule init
+
+      - name: Submodule Update
+        run: git submodule update
 
       - name: Make Gradle executable
         run: chmod +x ./gradlew
@@ -52,6 +64,12 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+
+      - name: Submodule Init
+        run: git submodule init
+
+      - name: Submodule Update
+        run: git submodule update
 
       - name: Make Gradle executable
         run: chmod +x ./gradlew
@@ -76,6 +94,12 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
 
+      - name: Submodule Init
+        run: git submodule init
+
+      - name: Submodule Update
+        run: git submodule update
+
       - name: set up JDK 11
         uses: actions/setup-java@v1
         with:
@@ -96,6 +120,12 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+
+      - name: Submodule Init
+        run: git submodule init
+
+      - name: Submodule Update
+        run: git submodule update
 
       - name: Make Gradle executable
         run: chmod +x ./gradlew
