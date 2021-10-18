@@ -3,7 +3,8 @@ name: Android Build QA
 on:
   push:
     branches:
-      #- '*'
+      - '*'
+      - '!master'
 
 jobs:
   lint:
