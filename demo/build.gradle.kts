@@ -130,4 +130,6 @@ dependencies {
     testImplementation(TestDependencies.junit)
     androidTestImplementation(TestDependencies.extJUnit)
     androidTestImplementation(TestDependencies.espressoCore)
+
+    implementation(project(mapOf("path" to ":module")))
 }

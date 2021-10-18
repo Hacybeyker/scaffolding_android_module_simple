@@ -3,7 +3,7 @@ name: Android Build QA
 on:
   push:
     branches:
-      - develop
+      - '*'
 
 jobs:
   lint:
@@ -89,4 +89,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-##TODO agegar job para publicar artefacto en github package
+  artifact:
+    name: Generate Artifact
+    needs: [ sonarqube ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Submodule Init
+        run: git submodule init
+
+      - name: Submodule Update
+        run: git submodule update
+
+      - name: Upload Artifact
+        env:
+          REPO_USERID: ${{secrets.REPO_USERID}}
+          REPO_TOKEN: ${{secrets.REPO_TOKEN}}
+        run: ./gradlew module:publishDebugPublicationToGithubPackagesRepository
