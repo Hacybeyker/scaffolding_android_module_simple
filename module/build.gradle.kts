@@ -8,6 +8,7 @@ plugins {
 
 apply(from = "sonarqube.gradle")
 apply(from = "jacoco.gradle")
+apply(from = "upload.gradle")
 
 android {
     compileSdk = VersionApp.compileSdkVersion

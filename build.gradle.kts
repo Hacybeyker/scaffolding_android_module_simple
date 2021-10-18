@@ -4,6 +4,13 @@ buildscript {
         mavenCentral()
         mavenLocal()
         maven { setUrl("https://jitpack.io") }
+        maven {
+            setUrl("https://maven.pkg.github.com/Hacybeyker/app-android-example")
+            credentials {
+                username = project.findProperty("REPO_USERID") as String? ?: System.getenv("REPO_USERID")
+                password = project.findProperty("REPO_TOKEN") as String? ?: System.getenv("REPO_TOKEN")
+            }
+        }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.3")
@@ -19,6 +26,13 @@ allprojects {
         mavenCentral()
         mavenLocal()
         maven { setUrl("https://jitpack.io") }
+        maven {
+            setUrl("https://maven.pkg.github.com/Hacybeyker/app-android-example")
+            credentials {
+                username = project.findProperty("REPO_USERID") as String? ?: System.getenv("REPO_USERID")
+                password = project.findProperty("REPO_TOKEN") as String? ?: System.getenv("REPO_TOKEN")
+            }
+        }
     }
 }
 
