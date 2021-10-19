@@ -1,7 +1,7 @@
 apply plugin: "org.sonarqube"
 
 sonarqube {
-    version = "2.6.1"
+    version = "3.3"
 }
 
 android {
@@ -24,9 +24,9 @@ android {
 
     sonarqube {
         properties {
-            property("sonar.projectKey", ConfigureApp.applicationId)
+            property("sonar.projectKey", "${ConfigureApp.groupId}.${ConfigureApp.artifactId}")
             property("sonar.organization", ConfigureApp.organization)
-            property("sonar.projectName", ConfigureApp.artifactId)
+            property("sonar.projectName", ConfigureApp.applicationId)
             property("sonar.projectDescription", "This project is: $ConfigureApp.applicationId")
             property("sonar.projectVersion", ConfigureApp.version)
             property("sonar.projectBaseDir", "${projectDir.absolutePath}")
@@ -39,7 +39,7 @@ android {
             property("sonar.objc.file.suffixes", "-")
             property("sonar.tests", "src/test/java, src/androidTest/java")
             property("sonar.import_unknown_files", true)
-            property("sonar.androidLint.reportPaths", "${project.buildDir}/reports/lint-results.xml")
+            property("sonar.androidLint.reportPaths", "${project.buildDir}/reports/lint-results-debug.xml")
             property("sonar.java.coveragePlugin", "jacoco")
             property("sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
             property("sonar.coverage.exclusions", fileFilter)

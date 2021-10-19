@@ -25,7 +25,7 @@ afterEvaluate {
         repositories {
             maven {
                 name = "GithubPackages"
-                url = "https://maven.pkg.github.com/Hacybeyker/app-android-example"
+                url = ConfigureApp.urlRepoDependencies
                 allowInsecureProtocol(true)
                 credentials {
                     username = repoUsername
