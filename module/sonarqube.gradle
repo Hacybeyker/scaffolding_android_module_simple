@@ -24,12 +24,12 @@ android {
 
     sonarqube {
         properties {
-            property("sonar.projectKey", Configuration.applicationId)
-            property("sonar.organization", "hacybeyker")
-            property("sonar.projectName", Configuration.artifactId)
-            property("sonar.projectDescription", "this is a module")
-            property("sonar.projectVersion", Configuration.version)
-            property("sonar.projectBaseDir", rootProject.rootDir.toString() + "/module")
+            property("sonar.projectKey", ConfigureApp.applicationId)
+            property("sonar.organization", ConfigureApp.organization)
+            property("sonar.projectName", ConfigureApp.artifactId)
+            property("sonar.projectDescription", "This project is: $ConfigureApp.applicationId")
+            property("sonar.projectVersion", ConfigureApp.version)
+            property("sonar.projectBaseDir", "${projectDir.absolutePath}")
             property("sonar.sources", "./src/main/")
             property("sonar.sourceEncoding", "UTF-8")
             property("sonar.java.binaries", "target/classes, app/build/tmp/kotlin-classes")

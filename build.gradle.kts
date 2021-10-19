@@ -7,8 +7,8 @@ buildscript {
         maven {
             setUrl("https://maven.pkg.github.com/Hacybeyker/app-android-example")
             credentials {
-                username = project.findProperty("REPO_USERID") as String? ?: System.getenv("REPO_USERID")
-                password = project.findProperty("REPO_TOKEN") as String? ?: System.getenv("REPO_TOKEN")
+                username = findProperty("REPO_USERID") as String? ?: System.getenv("REPO_USERID")
+                password = findProperty("REPO_TOKEN") as String? ?: System.getenv("REPO_TOKEN")
             }
         }
     }
@@ -29,8 +29,8 @@ allprojects {
         maven {
             setUrl("https://maven.pkg.github.com/Hacybeyker/app-android-example")
             credentials {
-                username = project.findProperty("REPO_USERID") as String? ?: System.getenv("REPO_USERID")
-                password = project.findProperty("REPO_TOKEN") as String? ?: System.getenv("REPO_TOKEN")
+                username = findProperty("REPO_USERID") as String? ?: System.getenv("REPO_USERID")
+                password = findProperty("REPO_TOKEN") as String? ?: System.getenv("REPO_TOKEN")
             }
         }
     }

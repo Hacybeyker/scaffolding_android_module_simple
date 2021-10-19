@@ -1,7 +1,6 @@
 apply(plugin = "maven-publish")
 
-group = Configuration.groupId
-version = generateVersion(Configuration.version)
+version = generateVersion(ConfigureApp.version)
 
 fun generateVersion(version: String): String {
     val branchName = getBranchName()
@@ -22,13 +21,13 @@ fun getBranchName(): String {
     val process = Runtime.getRuntime().exec("git rev-parse --abbrev-ref HEAD")
     val sb: StringBuilder = StringBuilder()
     while (true) {
-        val char = process.inputStream.read()
-        if (char == -1) break
-        sb.append(char.toChar())
+        val valueTemp = process.inputStream.read()
+        if (valueTemp == -1) break
+        sb.append(valueTemp.toChar())
     }
     return sb.toString().trim().replace("\n", "")
 }
 
 tasks.register("printVersion") {
-    println(generateVersion(Configuration.version))
+    println(generateVersion(ConfigureApp.version))
 }
