@@ -10,6 +10,6 @@ object ConfigureApp {
     //TODO change groupId with your groupId name
     const val groupId = "com.hacybeyker.android"
     //TODO change artifactId with your module name
-    const val artifactId = "module"
+    const val artifactId = "utils"
     const val version = "1.0.0"
 }

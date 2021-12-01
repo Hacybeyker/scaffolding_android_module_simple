@@ -16,7 +16,7 @@ afterEvaluate {
                 artifactId = ConfigureApp.artifactId
                 version = versionApp
                 artifacts {
-                    artifact("$buildDir/outputs/aar/${ConfigureApp.artifactId}-release.aar")
+                    artifact("$buildDir/outputs/aar/module-release.aar")
                 }
             }
         }
