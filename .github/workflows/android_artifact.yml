@@ -63,7 +63,4 @@ jobs:
               run: ./gradlew module:assembleRelease
 
             - name: Run Upload Artifact
-              env:
-                  REPO_USERID: ${{ secrets.REPO_USERID }}
-                  REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
               run: ./gradlew module:publishModulePublicationToArtifactRepository
