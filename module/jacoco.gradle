@@ -50,17 +50,17 @@ android {
 
         getSourceDirectories().setFrom(files([mainSrc, kotlinSrc]))
         getClassDirectories().setFrom(files([debugTree, kotlinTree]))
-        getExecutionData().setFrom(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
+        getExecutionData().setFrom(files("${projectDir.absolutePath}/jacoco.exec"))
     }
 
     task jacocoTestCoverageVerification(type: JacocoCoverageVerification, dependsOn: 'jacocoTestReport', group: 'jacocoReport') {
 
         getSourceDirectories().setFrom(files([mainSrc, kotlinSrc]))
         getClassDirectories().setFrom(files([debugTree, kotlinTree]))
-        getExecutionData().setFrom(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
+        getExecutionData().setFrom(files("${projectDir.absolutePath}/jacoco.exec"))
 
         violationRules {
-            setFailOnViolation(false)
+            setFailOnViolation(true)
 
             rule {
                 limit {

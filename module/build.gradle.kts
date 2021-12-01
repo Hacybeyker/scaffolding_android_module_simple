@@ -3,12 +3,13 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-    id("maven-publish")
 }
 
-apply(from = "sonarqube.gradle")
-apply(from = "jacoco.gradle")
-apply(from = "upload.gradle")
+apply {
+    from("sonarqube.gradle")
+    from("jacoco.gradle")
+    from("upload.gradle")
+}
 
 android {
     compileSdk = VersionApp.compileSdkVersion
@@ -23,7 +24,7 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

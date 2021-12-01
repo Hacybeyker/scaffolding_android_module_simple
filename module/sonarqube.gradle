@@ -27,7 +27,7 @@ android {
             property("sonar.projectKey", ConfigureApp.applicationId)
             property("sonar.organization", ConfigureApp.organization)
             property("sonar.projectName", ConfigureApp.projectName)
-            property("sonar.projectDescription", "This is an amazing project")
+            property("sonar.projectDescription", "This project is $ConfigureApp.projectName")
             property("sonar.projectVersion", ConfigureApp.version)
             property("sonar.projectBaseDir", "${projectDir.absolutePath}")
             property("sonar.sources", "./src/main/")
@@ -39,10 +39,12 @@ android {
             property("sonar.objc.file.suffixes", "-")
             property("sonar.tests", "src/test/java, src/androidTest/java")
             property("sonar.import_unknown_files", true)
-            property("sonar.androidLint.reportPaths", "${project.buildDir}/reports/lint-results-debug.xml")
-            property("sonar.java.coveragePlugin", "jacoco")
             property("sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
             property("sonar.coverage.exclusions", fileFilter)
+            property("sonar.androidLint.reportPaths", "${project.buildDir}/reports/lint-results-debug.xml")
+            property("sonar.junit.reportPaths", "${project.buildDir}/test-results/testDebugUnitTest/**.xml")
+            property("sonar.java.file.suffixes", ".java, .jav")
+            property("sonar.kotlin.file.suffixes", ".kt")
         }
     }
 }

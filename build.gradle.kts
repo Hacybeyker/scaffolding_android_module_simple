@@ -6,6 +6,7 @@ buildscript {
         maven { setUrl("https://jitpack.io") }
         maven {
             setUrl(ConfigureApp.urlRepoDependencies)
+            isAllowInsecureProtocol = true
             credentials {
                 username = findProperty("REPO_USERID") as String? ?: System.getenv("REPO_USERID")
                 password = findProperty("REPO_TOKEN") as String? ?: System.getenv("REPO_TOKEN")
@@ -28,6 +29,7 @@ allprojects {
         maven { setUrl("https://jitpack.io") }
         maven {
             setUrl(ConfigureApp.urlRepoDependencies)
+            isAllowInsecureProtocol = true
             credentials {
                 username = findProperty("REPO_USERID") as String? ?: System.getenv("REPO_USERID")
                 password = findProperty("REPO_TOKEN") as String? ?: System.getenv("REPO_TOKEN")

@@ -1,29 +1,31 @@
-name: Android Build QA
+name: Android Deploy
 
 on:
   push:
     branches:
-      - '*'
-      - '!master'
+      - 'develop'
 
 jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    env:
+      REPO_USERID: ${{ secrets.REPO_USERID }}
+      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
     steps:
-      - name: Checkout the code
+      - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Submodule
+      - name: Git Submodule
         uses: ./.github/workflows/submodule-action
 
-      - name: Make Gradle executable
+      - name: Make Gradle Executable
         run: chmod +x ./gradlew
 
-      - name: Run lint
+      - name: Run Lint
         run: ./gradlew module:lintDebug
 
-      - name: Upload html test report
+      - name: Upload Lint Test Report
         uses: actions/upload-artifact@v2
         with:
           name: lint_report
@@ -33,20 +35,23 @@ jobs:
     name: Unit Test
     needs: [ lint ]
     runs-on: ubuntu-latest
+    env:
+      REPO_USERID: ${{ secrets.REPO_USERID }}
+      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
     steps:
-      - name: Checkout the code
+      - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Submodule
+      - name: Git Submodule
         uses: ./.github/workflows/submodule-action
 
-      - name: Make Gradle executable
+      - name: Make Gradle Executable
         run: chmod +x ./gradlew
 
-      - name: Run tests
-        run: ./gradlew module:testDebug
+      - name: Run Tests
+        run: ./gradlew module:testDebugUnitTest
 
-      - name: Upload test report
+      - name: Upload Test Report
         uses: actions/upload-artifact@v2
         with:
           name: unit_test_report
@@ -56,14 +61,17 @@ jobs:
     name: Coverage Test
     needs: [ unit-test ]
     runs-on: ubuntu-latest
+    env:
+      REPO_USERID: ${{ secrets.REPO_USERID }}
+      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
     steps:
-      - name: Checkout the code
+      - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Submodule
+      - name: Git Submodule
         uses: ./.github/workflows/submodule-action
 
-      - name: Make Gradle executable
+      - name: Make Gradle Executable
         run: chmod +x ./gradlew
 
       - name: Run Jacoco Test Report
@@ -82,11 +90,14 @@ jobs:
     name: Analysis Code
     needs: [ jacoco ]
     runs-on: ubuntu-latest
+    env:
+      REPO_USERID: ${{ secrets.REPO_USERID }}
+      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
     steps:
-      - name: Checkout the code
+      - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Submodule
+      - name: Git Submodule
         uses: ./.github/workflows/submodule-action
 
       - name: Setup JDK 11
@@ -94,30 +105,47 @@ jobs:
         with:
           java-version: 11
 
-      - name: Make Gradle executable
+      - name: Make Gradle Executable
         run: chmod +x ./gradlew
 
-      - name: SonarCloud Scan
+      - name: Run Lint
+        run: ./gradlew module:lintDebug
+
+      - name: Run Tests
+        run: ./gradlew module:testDebugUnitTest
+
+      - name: Run Jacoco Test Report
+        run: ./gradlew module:jacocoTestReport
+
+      - name: Run SonarQube Scan
         run: ./gradlew module:sonarqube -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.login=${{ secrets.SONARCLOUDTOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   artifact:
-    name: Generate Artifact
+    name: Artifact
     needs: [ sonarqube ]
     runs-on: ubuntu-latest
+    env:
+      REPO_USERID: ${{ secrets.REPO_USERID }}
+      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
     steps:
-      - name: Checkout the code
+      - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Submodule
+      - name: Git Submodule
         uses: ./.github/workflows/submodule-action
 
-      - name: Make Gradle executable
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Make Gradle Executable
         run: chmod +x ./gradlew
 
-      - name: Upload Artifact
-        env:
-          REPO_USERID: ${{ secrets.REPO_USERID }}
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: ./gradlew module:publishDebugPublicationToGithubPackagesRepository
+      - name: Run AssembleRelease
+        run: ./gradlew module:assembleRelease
+
+      - name: Run Upload Artifact
+        run: ./gradlew module:publishModulePublicationToArtifactRepository

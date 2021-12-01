@@ -1,5 +1,8 @@
 apply plugin: 'maven-publish'
-apply { from("distribution.gradle.kts") }
+
+apply {
+    from("distribution.gradle.kts")
+}
 
 def repoUsername = findProperty("REPO_USERID") ?: System.getenv("REPO_USERID")
 def repoPassword = findProperty("REPO_TOKEN") ?: System.getenv("REPO_TOKEN")
@@ -8,23 +11,18 @@ def versionApp = version
 afterEvaluate {
     publishing {
         publications {
-            release(MavenPublication) {
-                from components.release
+            module(MavenPublication) {
                 groupId = ConfigureApp.groupId
                 artifactId = ConfigureApp.artifactId
                 version = versionApp
-            }
-
-            debug(MavenPublication) {
-                from components.debug
-                groupId = ConfigureApp.groupId
-                artifactId = ConfigureApp.artifactId
-                version = versionApp
+                artifacts {
+                    artifact("$buildDir/outputs/aar/${ConfigureApp.artifactId}-release.aar")
+                }
             }
         }
         repositories {
             maven {
-                name = "GithubPackages"
+                name = "Artifact"
                 url = ConfigureApp.urlRepoDependencies
                 allowInsecureProtocol(true)
                 credentials {
