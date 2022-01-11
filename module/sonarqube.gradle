@@ -39,12 +39,16 @@ android {
             property("sonar.objc.file.suffixes", "-")
             property("sonar.tests", "src/test/java, src/androidTest/java")
             property("sonar.import_unknown_files", true)
+            property("sonar.java.coveragePlugin", "jacoco")
             property("sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
             property("sonar.coverage.exclusions", fileFilter)
             property("sonar.androidLint.reportPaths", "${project.buildDir}/reports/lint-results-debug.xml")
             property("sonar.junit.reportPaths", "${project.buildDir}/test-results/testDebugUnitTest/**.xml")
             property("sonar.java.file.suffixes", ".java, .jav")
             property("sonar.kotlin.file.suffixes", ".kt")
+            property("sonar.kotlin.detekt.reportPaths", "${project.buildDir}/reports/detekt/detekt.xml")
+            property("sonar.issuesReport.html.enable", "true")
+            property("sonar.issuesReport.console.enable", "true")
         }
     }
 }

@@ -7,7 +7,7 @@ jacoco {
 android {
     buildTypes {
         debug {
-            testCoverageEnabled true
+            testCoverageEnabled false
         }
     }
     testOptions {
@@ -15,29 +15,65 @@ android {
             jacoco {
                 includeNoLocationClasses = true
                 jacoco.excludes = ['jdk.internal.*']
+                testLogging {
+                    events "passed", "skipped", "failed", "standardOut", "standardError"
+                    outputs.upToDateWhen { false }
+                    showStandardStreams = true
+                }
             }
+        }
+
+        sourceSets {
+            main.java.srcDirs += 'src/main/java'
+            test.java.srcDirs += 'src/test/java'
+            androidTest.java.srcDirs += 'src/androidTest/java'
         }
     }
 
     def fileFilter = [
-            '*/$ViewInjector*.*',
-            '*/$ViewBinder*.*',
+            'android/databinding/**/*.class',
+            '**/android/databinding/*Binding.class',
+            '**/android/databinding/*',
+            '**/androidx/databinding/*',
+            '**/BR.*',
             '**/R.class',
-            '*/R$.class',
+            '**/R\$*.class',
             '**/R2.class',
-            '*/R2$.class',
-            '*/BuildConfig.',
-            '*/Manifest.*',
+            '*/R2\$.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*',
+            '**/*MapperImpl*.*',
+            '**/*$ViewInjector*.*',
+            '**/*$ViewBinder*.*',
+            '**/BuildConfig.*',
+            '**/*Component*.*',
+            '**/*BR*.*',
+            '**/Manifest*.*',
+            '**/*$Lambda\$*.*',
+            '**/*Companion*.*',
+            '**/*Module*.*',
+            '**/*Dagger*.*',
+            '**/*Hilt*.*',
+            '**/*MembersInjector*.*',
+            '**/*_MembersInjector.class',
+            '**/*_Factory*.*',
+            '**/*_Provide*Factory*.*',
+            '**/*Extensions*.*',
+            '**/*$Result.*',
+            '**/*$Result\$*.*',
+            '**/*JsonAdapter.*',
             '*/*Test.*',
             'android/*/.*',
             '*/_ViewBinding*.*',
             '*/_Factory.*',
-            '*/_MembersInjector.*',
-            '*/$$Parcelable*.*'
+            '*/\$$Parcelable*.*'
     ]
 
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug/classes", excludes: fileFilter)
     def kotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+
     def mainSrc = "${project.projectDir}/src/main/java"
     def kotlinSrc = "${project.projectDir}/src/main/kotlin"
 
@@ -50,14 +86,14 @@ android {
 
         getSourceDirectories().setFrom(files([mainSrc, kotlinSrc]))
         getClassDirectories().setFrom(files([debugTree, kotlinTree]))
-        getExecutionData().setFrom(files("${projectDir.absolutePath}/jacoco.exec"))
+        getExecutionData().setFrom(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
     }
 
     task jacocoTestCoverageVerification(type: JacocoCoverageVerification, dependsOn: 'jacocoTestReport', group: 'jacocoReport') {
 
         getSourceDirectories().setFrom(files([mainSrc, kotlinSrc]))
         getClassDirectories().setFrom(files([debugTree, kotlinTree]))
-        getExecutionData().setFrom(files("${projectDir.absolutePath}/jacoco.exec"))
+        getExecutionData().setFrom(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
 
         violationRules {
             setFailOnViolation(true)

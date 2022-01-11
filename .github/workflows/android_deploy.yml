@@ -31,6 +31,21 @@ jobs:
           name: lint_report
           path: module/build/reports/lint-results-debug.html
 
+      - name: Run KLintFormat
+        run: ./gradlew module:ktlintFormat
+
+      - name: Run KtLintCheck
+        run: ./gradlew module:ktlintCheck
+
+      - name: Run Detekt
+        run: ./gradlew module:detekt
+
+      - name: Upload Detekt Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: detekt_report
+          path: module/build/reports/detekt
+
   unit-test:
     name: Unit Test
     needs: [ lint ]
@@ -110,6 +125,15 @@ jobs:
 
       - name: Run Lint
         run: ./gradlew module:lintDebug
+
+      - name: Run KLintFormat
+        run: ./gradlew module:ktlintFormat
+
+      - name: Run KtLintCheck
+        run: ./gradlew module:ktlintCheck
+
+      - name: Run Detekt
+        run: ./gradlew module:detekt
 
       - name: Run Tests
         run: ./gradlew module:testDebugUnitTest
