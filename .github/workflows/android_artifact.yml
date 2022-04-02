@@ -1,81 +1,81 @@
 name: Android Artifact
 
-on: [workflow_dispatch]
+on: [ workflow_dispatch ]
 
 jobs:
-    artifact:
-        name: Artifact
-        runs-on: ubuntu-latest
-        env:
-            REPO_USERID: ${{ secrets.REPO_USERID }}
-            REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v2
+  artifact:
+    name: Artifact
+    runs-on: ubuntu-latest
+    env:
+      REPO_USERID: ${{ secrets.REPO_USERID }}
+      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-            - name: Git Submodule
-              uses: ./.github/workflows/submodule-action
+    - name: Git Submodule
+      uses: ./.github/workflows/submodule-action
 
-            - name: Setup JDK 11
-              uses: actions/setup-java@v1
-              with:
-                  java-version: 11
+    - name: Setup JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
 
-            - name: Make Gradle Executable
-              run: chmod +x ./gradlew
+    - name: Make Gradle Executable
+      run: chmod +x ./gradlew
 
-            - name: Run Lint
-              run: ./gradlew module:lintDebug
+    - name: Run Lint
+      run: ./gradlew module:lintDebug
 
-            - name: Upload Lint Test Report
-              uses: actions/upload-artifact@v2
-              with:
-                  name: lint_report
-                  path: module/build/reports/lint-results-debug.html
+    - name: Upload Lint Test Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: lint_report
+        path: module/build/reports/lint-results-debug.html
 
-            - name: Run KtLintFormat
-              run: ./gradlew module:ktlintFormat
+    - name: Run KtLintFormat
+      run: ./gradlew module:ktlintFormat
 
-            - name: Run KtLintCheck
-              run: ./gradlew module:ktlintCheck
+    - name: Run KtLintCheck
+      run: ./gradlew module:ktlintCheck
 
-            - name: Run Detekt
-              run: ./gradlew module:detekt
+    - name: Run Detekt
+      run: ./gradlew module:detekt
 
-            - name: Upload Detekt Report
-              uses: actions/upload-artifact@v2
-              with:
-                name: detekt_report
-                path: module/build/reports/detekt
+    - name: Upload Detekt Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: detekt_report
+        path: module/build/reports/detekt
 
-            - name: Run Tests
-              run: ./gradlew module:testDebugUnitTest
+    - name: Run Tests
+      run: ./gradlew module:testDebugUnitTest
 
-            - name: Upload Test Report
-              uses: actions/upload-artifact@v2
-              with:
-                  name: unit_test_report
-                  path: module/build/reports/tests/testDebugUnitTest/
+    - name: Upload Test Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: unit_test_report
+        path: module/build/reports/tests/testDebugUnitTest/
 
-            - name: Run Jacoco Test Report
-              run: ./gradlew module:jacocoTestReport
+    - name: Run Jacoco Test Report
+      run: ./gradlew module:jacocoTestReport
 
-            - name: Upload Coverage Test Report
-              uses: actions/upload-artifact@v2
-              with:
-                  name: jacoco_test_report
-                  path: module/build/reports/jacoco/jacocoTestReport/
+    - name: Upload Coverage Test Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: jacoco_test_report
+        path: module/build/reports/jacoco/jacocoTestReport/
 
-            - name: Run Jacoco Test Coverage Verification
-              run: ./gradlew module:jacocoTestCoverageVerification
+    - name: Run Jacoco Test Coverage Verification
+      run: ./gradlew module:jacocoTestCoverageVerification
 
-            - name: Run SonarQube Scan
-              run: ./gradlew module:sonarqube -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.login=${{ secrets.SONARCLOUDTOKEN }}
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run SonarQube Scan
+      run: ./gradlew module:sonarqube -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.login=${{ secrets.SONARCLOUDTOKEN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Run AssembleRelease
-              run: ./gradlew module:assembleRelease
+    - name: Run AssembleRelease
+      run: ./gradlew module:assembleRelease
 
-            - name: Run Upload Artifact
-              run: ./gradlew module:publishModulePublicationToArtifactRepository
+    - name: Run Upload Artifact
+      run: ./gradlew module:publishModulePublicationToArtifactRepository
