@@ -16,11 +16,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Git Submodule
-        uses: ./.github/workflows/submodule-action
-
-      - name: Make Gradle Executable
-        run: chmod +x ./gradlew
+      - name: Configure Step
+        uses: ./.github/workflows/actions/configure
 
       - name: Run Lint
         run: ./gradlew module:lintDebug
@@ -46,8 +43,8 @@ jobs:
           name: detekt_report
           path: module/build/reports/detekt
 
-  unit-test:
-    name: Unit Test
+  code-analysis:
+    name: Code Analysis
     needs: [ lint ]
     runs-on: ubuntu-latest
     env:
@@ -57,11 +54,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Git Submodule
-        uses: ./.github/workflows/submodule-action
-
-      - name: Make Gradle Executable
-        run: chmod +x ./gradlew
+      - name: Configure Step
+        uses: ./.github/workflows/actions/configure
 
       - name: Run Tests
         run: ./gradlew module:testDebugUnitTest
@@ -71,23 +65,6 @@ jobs:
         with:
           name: unit_test_report
           path: module/build/reports/tests/testDebugUnitTest/
-
-  jacoco:
-    name: Coverage Test
-    needs: [ unit-test ]
-    runs-on: ubuntu-latest
-    env:
-      REPO_USERID: ${{ secrets.REPO_USERID }}
-      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Git Submodule
-        uses: ./.github/workflows/submodule-action
-
-      - name: Make Gradle Executable
-        run: chmod +x ./gradlew
 
       - name: Run Jacoco Test Report
         run: ./gradlew module:jacocoTestReport
@@ -101,46 +78,6 @@ jobs:
       - name: Run Jacoco Test Coverage Verification
         run: ./gradlew module:jacocoTestCoverageVerification
 
-  sonarqube:
-    name: Analysis Code
-    needs: [ jacoco ]
-    runs-on: ubuntu-latest
-    env:
-      REPO_USERID: ${{ secrets.REPO_USERID }}
-      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Git Submodule
-        uses: ./.github/workflows/submodule-action
-
-      - name: Setup JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
-      - name: Make Gradle Executable
-        run: chmod +x ./gradlew
-
-      - name: Run Lint
-        run: ./gradlew module:lintDebug
-
-      - name: Run KLintFormat
-        run: ./gradlew module:ktlintFormat
-
-      - name: Run KtLintCheck
-        run: ./gradlew module:ktlintCheck
-
-      - name: Run Detekt
-        run: ./gradlew module:detekt
-
-      - name: Run Tests
-        run: ./gradlew module:testDebugUnitTest
-
-      - name: Run Jacoco Test Report
-        run: ./gradlew module:jacocoTestReport
-
       - name: Run SonarQube Scan
         run: ./gradlew module:sonarqube -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.login=${{ secrets.SONARCLOUDTOKEN }}
         env:
@@ -148,7 +85,7 @@ jobs:
 
   artifact:
     name: Artifact
-    needs: [ sonarqube ]
+    needs: [ code-analysis ]
     runs-on: ubuntu-latest
     env:
       REPO_USERID: ${{ secrets.REPO_USERID }}
@@ -157,16 +94,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Git Submodule
-        uses: ./.github/workflows/submodule-action
-
-      - name: Setup JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
-      - name: Make Gradle Executable
-        run: chmod +x ./gradlew
+      - name: Configure Step
+        uses: ./.github/workflows/actions/configure
 
       - name: Run AssembleRelease
         run: ./gradlew module:assembleRelease

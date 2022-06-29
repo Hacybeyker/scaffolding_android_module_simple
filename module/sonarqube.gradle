@@ -1,26 +1,12 @@
 apply plugin: "org.sonarqube"
+apply { from("filter.gradle") }
 
 sonarqube {
     version = "3.3"
 }
 
 android {
-    def fileFilter = [
-            '*/$ViewInjector*.*',
-            '*/$ViewBinder*.*',
-            '**/R.class',
-            '*/R$.class',
-            '**/R2.class',
-            '*/R2$.class',
-            '*/BuildConfig.',
-            '*/Manifest.*',
-            '*/*Test.*',
-            'android/*/.*',
-            '*/_ViewBinding*.*',
-            '*/_Factory.*',
-            '*/_MembersInjector.*',
-            '*/$$Parcelable*.*'
-    ]
+    def fileFilter = getMyFilter()
 
     sonarqube {
         properties {

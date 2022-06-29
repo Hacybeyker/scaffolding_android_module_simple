@@ -14,13 +14,13 @@ apply {
 }
 
 android {
-    compileSdk = VersionApp.compileSdkVersion
-    buildToolsVersion = VersionApp.buildToolsVersion
+    compileSdk = AppVersion.compileSdkVersion
+    buildToolsVersion = AppVersion.buildToolsVersion
 
     defaultConfig {
-        minSdk = VersionApp.minSdkVersion
-        targetSdk = VersionApp.targetSdkVersion
-        testInstrumentationRunner = VersionApp.testInstrumentationRunner
+        minSdk = AppVersion.minSdkVersion
+        targetSdk = AppVersion.targetSdkVersion
+        testInstrumentationRunner = AppVersion.testInstrumentationRunner
         consumerProguardFiles("consumer-rules.pro")
         renderscriptSupportModeEnabled = true
     }
@@ -33,6 +33,16 @@ android {
                 "proguard-rules.pro"
             )
             buildConfigField("String", "EXAMPLE_FIELD", "\"example-release\"")
+        }
+
+        create("qa") {
+            initWith(getByName("debug"))
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField("String", "EXAMPLE_FIELD", "\"example-debug\"")
         }
 
         getByName("debug") {
@@ -53,7 +63,24 @@ android {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
 
     buildFeatures {
+        dataBinding = true
         viewBinding = true
+    }
+
+    lint {
+        disable.addAll(
+            listOf(
+                "TypographyFractions",
+                "TypographyQuotes",
+                "JvmStaticProvidesInObjectDetector",
+                "FieldSiteTargetOnQualifierAnnotation",
+                "ModuleCompanionObjects",
+                "ModuleCompanionObjectsNotInModuleParent"
+            )
+        )
+        checkDependencies = true
+        abortOnError = false
+        ignoreWarnings = false
     }
 
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
@@ -72,25 +99,34 @@ android {
         }
     }
 
-    lint {
-        disable("TypographyFractions", "TypographyQuotes")
-        isCheckDependencies = true
-        isAbortOnError = false
-        isIgnoreWarnings = false
+    tasks {
+        "preBuild" {
+            dependsOn("ktlintFormat")
+            dependsOn("ktlintCheck")
+            dependsOn("detekt")
+        }
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
 dependencies {
     implementation(fileTree("libs") { include(listOf("*.jar", "*.aar")) })
-    implementation(MainApplicationDependencies.kotlinStdlib)
-    implementation(MainApplicationDependencies.coreKtx)
-    implementation(MainApplicationDependencies.appCompat)
-    implementation(MainApplicationDependencies.material)
-    implementation(MainApplicationDependencies.constraintLayout)
-
+    implementation(AppDependencies.kotlinStdlib)
+    implementation(AppDependencies.coreKtx)
+    // View
+    implementation(AppDependencies.appCompat)
+    implementation(AppDependencies.material)
+    implementation(AppDependencies.constraintLayout)
+    // Test
     testImplementation(TestDependencies.junit)
     androidTestImplementation(TestDependencies.extJUnit)
     androidTestImplementation(TestDependencies.espressoCore)
     // Detekt
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.18.0")
+    detektPlugins(ValidationDependencies.detekt)
 }

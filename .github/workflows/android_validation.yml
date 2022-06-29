@@ -16,16 +16,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Git Submodule
-        uses: ./.github/workflows/submodule-action
-
-      - name: Setup JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
-      - name: Make Gradle Executable
-        run: chmod +x ./gradlew
+      - name: Configure Step
+        uses: ./.github/workflows/actions/configure
 
       - name: Run Lint
         run: ./gradlew module:lintDebug

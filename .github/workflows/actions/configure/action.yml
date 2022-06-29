@@ -1,0 +1,11 @@
+name: "Configure Step"
+description: "Run steps to initialize"
+runs:
+  using: "composite"
+  steps:
+    - name: Submodule
+      uses: ./.github/workflows/actions/submodule
+
+    - name: Make Gradle Executable
+      run: chmod +x ./gradlew
+      shell: bash
