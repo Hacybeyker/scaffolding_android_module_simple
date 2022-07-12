@@ -8,8 +8,10 @@ buildscript {
             setUrl(ConfigureApp.urlRepoDependencies)
             isAllowInsecureProtocol = true
             credentials {
-                username = findProperty("REPO_USERID") as String? ?: System.getenv("REPO_USERID")
-                password = findProperty("REPO_TOKEN") as String? ?: System.getenv("REPO_TOKEN")
+                //TODO change for your property
+                username =
+                    findProperty("REPO_USERID_YOUR") as String? ?: System.getenv("REPO_USERID")
+                password = findProperty("REPO_TOKEN_YOUR") as String? ?: System.getenv("REPO_TOKEN")
             }
         }
     }
@@ -31,8 +33,10 @@ allprojects {
             setUrl(ConfigureApp.urlRepoDependencies)
             isAllowInsecureProtocol = true
             credentials {
-                username = findProperty("REPO_USERID") as String? ?: System.getenv("REPO_USERID")
-                password = findProperty("REPO_TOKEN") as String? ?: System.getenv("REPO_TOKEN")
+                //TODO change for your property
+                username =
+                    findProperty("REPO_USERID_YOUR") as String? ?: System.getenv("REPO_USERID")
+                password = findProperty("REPO_TOKEN_YOUR") as String? ?: System.getenv("REPO_TOKEN")
             }
         }
     }

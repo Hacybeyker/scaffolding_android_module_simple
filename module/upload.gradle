@@ -4,8 +4,9 @@ apply {
     from("distribution.gradle.kts")
 }
 
-def repoUsername = findProperty("REPO_USERID") ?: System.getenv("REPO_USERID")
-def repoPassword = findProperty("REPO_TOKEN") ?: System.getenv("REPO_TOKEN")
+//TODO change for your properties
+def repoUsername = findProperty("REPO_USERID_YOUR") ?: System.getenv("REPO_USERID")
+def repoPassword = findProperty("REPO_TOKEN_YOUR") ?: System.getenv("REPO_TOKEN")
 def versionApp = version
 
 afterEvaluate {

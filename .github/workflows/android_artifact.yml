@@ -2,13 +2,14 @@ name: Android Artifact
 
 on: [ workflow_dispatch ]
 
+env:
+  REPO_USERID: ${{ secrets.REPO_USERID }}
+  REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+
 jobs:
   artifact:
     name: Artifact
     runs-on: ubuntu-latest
-    env:
-      REPO_USERID: ${{ secrets.REPO_USERID }}
-      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -17,19 +18,13 @@ jobs:
         uses: ./.github/workflows/actions/configure
 
       - name: Run Lint
-        run: ./gradlew module:lintDebug
+        uses: ./.github/workflows/actions/lint
 
       - name: Upload Lint Test Report
         uses: actions/upload-artifact@v2
         with:
           name: lint_report
           path: module/build/reports/lint-results-debug.html
-
-      - name: Run KtLintCheck
-        run: ./gradlew module:ktlintCheck
-
-      - name: Run Detekt
-        run: ./gradlew module:detekt
 
       - name: Upload Detekt Report
         uses: actions/upload-artifact@v2

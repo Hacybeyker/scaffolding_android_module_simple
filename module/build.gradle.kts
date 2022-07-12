@@ -123,10 +123,37 @@ dependencies {
     implementation(AppDependencies.appCompat)
     implementation(AppDependencies.material)
     implementation(AppDependencies.constraintLayout)
+    // Hilt
+    implementation(AppDependencies.hilt)
+    androidTestImplementation(project(mapOf("path" to ":demo")))
+    kapt(AppDependencies.hiltCompiler)
+    // ViewModel & Livedata
+    implementation(AppDependencies.lifecycleViewModel)
+    implementation(AppDependencies.lifecycleLiveData)
+    implementation(AppDependencies.lifecycleRuntime)
+    // Coroutines
+    implementation(AppDependencies.coroutinesCore)
+    implementation(AppDependencies.coroutinesAndroid)
+    // Retrofit
+    implementation(AppDependencies.retrofit)
+    implementation(AppDependencies.converterGson)
+    implementation(AppDependencies.loggingInterceptor)
+    implementation(AppDependencies.okHttpJsonMock)
     // Test
     testImplementation(TestDependencies.junit)
+    testImplementation(TestDependencies.robolectric)
+    testImplementation(TestDependencies.archCore)
+    testImplementation(TestDependencies.coreKtx)
+    testImplementation(TestDependencies.junitKtx)
+    testImplementation(TestDependencies.kotlinCoroutines)
+    testImplementation(TestDependencies.mockitoKotlin)
+    testImplementation(TestDependencies.mockitoInline)
     androidTestImplementation(TestDependencies.extJUnit)
     androidTestImplementation(TestDependencies.espressoCore)
+    // Chucker
+    debugImplementation(AppDependencies.chucker)
+    "qaImplementation"(AppDependencies.chucker)
+    releaseImplementation(AppDependencies.chuckerNoOp)
     // Detekt
     detektPlugins(ValidationDependencies.detekt)
 }

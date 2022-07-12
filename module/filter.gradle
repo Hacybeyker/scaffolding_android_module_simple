@@ -47,9 +47,6 @@ ext.getMyFilter = { ->
             '**/data/model**',
             '**/di/**',
             '**/domain/entity**',
-            '**/ui/splash/SplashActivity**',
-            '**/ui/home/HomeActivity**',
-            '**/ui/movie/MovieActivity**',
             '**/utils/**'
     ]
 }

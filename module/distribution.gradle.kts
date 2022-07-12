@@ -1,9 +1,17 @@
-version = generateVersion(ConfigureApp.version)
+version = obtainVersion(ConfigureApp.version)
+
+fun obtainVersion(version: String): String {
+    val version = generateVersion(ConfigureApp.version)
+    printSignature()
+    printVersionModule(version)
+    printDependencyModule(version)
+    return version
+}
 
 fun generateVersion(version: String): String {
     val branchName = getBranchName()
-    val isDevelopBranch = "develop" == branchName || "master" == branchName
-    if (isDevelopBranch) {
+    val isMasterBranch = "master" == branchName
+    if (isMasterBranch) {
         return version
     }
     val sb: StringBuilder = StringBuilder()
@@ -26,6 +34,25 @@ fun getBranchName(): String {
     return sb.toString().trim().replace("\n", "")
 }
 
-tasks.register("printVersion") {
-    println(generateVersion(ConfigureApp.version))
+fun printSignature() {
+    println(
+        """
+ _   _                      _                   _                
+| | | |                    | |                 | |               
+| |_| |  __ _   ___  _   _ | |__    ___  _   _ | | __  ___  _ __ 
+|  _  | / _` | / __|| | | || '_ \  / _ \| | | || |/ / / _ \| '__|
+| | | || (_| || (__ | |_| || |_) ||  __/| |_| ||   < |  __/| |   
+\_| |_/ \__,_| \___| \__, ||_.__/  \___| \__, ||_|\_\ \___||_|   
+                      __/ |               __/ |                  
+                     |___/               |___/                   
+"""
+    )
+}
+
+fun printVersionModule(version: String) {
+    println("Version: $version")
+}
+
+fun printDependencyModule(version: String) {
+    println("Module: ${ConfigureApp.groupId}:${ConfigureApp.artifactId}:$version")
 }

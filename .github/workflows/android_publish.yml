@@ -1,9 +1,11 @@
-name: Android Deploy
+name: Android Publish
 
-on:
-  push:
-    branches:
-      - 'develop'
+on: [ workflow_dispatch ]
+#TODO Change for this
+#on:
+  #push:
+    #branches:
+      #- 'master'
 
 env:
   REPO_USERID: ${{ secrets.REPO_USERID }}
@@ -88,6 +90,14 @@ jobs:
 
       - name: Run AssembleRelease
         run: ./gradlew module:assembleRelease
+
+      - name: Create Tag Release
+        run: |
+          currentVersion=`grep version ./buildSrc/src/main/kotlin/ConfigureApp.kt | awk -F" " '{ print $5 }' `
+          versionFormatted=`echo $currentVersion | sed 's/.\(.*\)/\1/' | sed 's/\(.*\)./\1/'`
+          echo "Version: $versionFormatted"
+          git tag $versionFormatted
+          git push origin --tags
 
       - name: Run Upload Artifact
         run: ./gradlew module:publishModulePublicationToArtifactRepository
