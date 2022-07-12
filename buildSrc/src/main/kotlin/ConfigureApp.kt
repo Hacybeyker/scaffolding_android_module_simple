@@ -8,7 +8,6 @@ object ConfigureApp {
     const val version = "1.0.0"
 
     //TODO change values with your info [SonarQube]
-    const val applicationId = "${groupId}.${artifactId}"
     const val organization = "hacybeyker"
     const val projectName = "app-android-${artifactId}"
 }
