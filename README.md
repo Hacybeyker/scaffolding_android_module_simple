@@ -1,6 +1,6 @@
-# Project [name_project]
+# Module [name_module]
 
-Description for project.
+Description for module.
 
 ## Setup
 
@@ -41,7 +41,6 @@ KEY_QA=YOUR_KEY
 ## Service
 - [Github Actions]()
 - [SonarCloud]()
-- [MAD]()
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
