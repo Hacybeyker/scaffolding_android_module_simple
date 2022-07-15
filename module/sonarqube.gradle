@@ -10,7 +10,7 @@ android {
 
     sonarqube {
         properties {
-            property("sonar.projectKey", ConfigureApp.projectName)
+            property("sonar.projectKey", "${ConfigureApp.organization}-${ConfigureApp.projectName}")
             property("sonar.organization", ConfigureApp.organization)
             property("sonar.projectName", ConfigureApp.projectName)
             property("sonar.projectDescription", "This project is $ConfigureApp.projectName")

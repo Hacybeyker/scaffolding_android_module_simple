@@ -5,6 +5,7 @@ plugins {
     id("kotlin-parcelize")
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     id("io.gitlab.arturbosch.detekt") version "1.18.1"
+    id("dagger.hilt.android.plugin")
 }
 
 apply {
@@ -125,7 +126,6 @@ dependencies {
     implementation(AppDependencies.constraintLayout)
     // Hilt
     implementation(AppDependencies.hilt)
-    androidTestImplementation(project(mapOf("path" to ":demo")))
     kapt(AppDependencies.hiltCompiler)
     // ViewModel & Livedata
     implementation(AppDependencies.lifecycleViewModel)

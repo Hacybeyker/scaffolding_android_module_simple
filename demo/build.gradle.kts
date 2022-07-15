@@ -3,6 +3,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -91,10 +92,17 @@ dependencies {
     implementation(AppDependencies.appCompat)
     implementation(AppDependencies.material)
     implementation(AppDependencies.constraintLayout)
+    // Hilt
+    implementation(AppDependencies.hilt)
+    kapt(AppDependencies.hiltCompiler)
     // Test
     testImplementation(TestDependencies.junit)
     androidTestImplementation(TestDependencies.extJUnit)
     androidTestImplementation(TestDependencies.espressoCore)
+    // Chucker
+    debugImplementation(AppDependencies.chucker)
+    "qaImplementation"(AppDependencies.chucker)
+    releaseImplementation(AppDependencies.chuckerNoOp)
 
     implementation(project(mapOf("path" to ":module")))
 }
